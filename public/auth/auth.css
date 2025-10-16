@@ -3,3 +3,33 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.navbar{
+    height: 3vh;
+    width: 100%;
+    background-color: rgb(54, 54, 54);
+}
+
+.container{
+    width: 100%;
+    height: 97vh;
+    background-color: #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: rgb(54, 54, 54);
+}
+
+.container h1{
+    font-size: 75px;
+}
+
+#loginForm{
+    width: 60%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}

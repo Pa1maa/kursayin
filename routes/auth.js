@@ -32,11 +32,11 @@ router.post("/login", async (req, res)=>{
         res.json({ message: "Login successful" })
     }
     catch(err){
-        res.status(500).json({ message: "Srever error" })
+        res.status(500).json({ message: "Server error" })
     }
 })
 
-router.post("logout", (req, res)=>{
+router.post("/logout", (req, res)=>{
     req.session.destroy(err=>{
         if(err) return res.status(500).json({ error: "Logout failed" })
         res.clearCookie("connect.sid")
@@ -45,7 +45,7 @@ router.post("logout", (req, res)=>{
 })
 
 router.get("/me", async (req, res)=>{
-    if(!res.session.userId) return res.status(401).json({ error: "Not logged in" })
+    if(!req.session.userId) return res.status(401).json({ error: "Not logged in" })
     const user = await User.findById(req.session.userId).select("-password")
     res.json(user)
 })
