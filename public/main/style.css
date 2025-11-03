@@ -4,33 +4,90 @@
     box-sizing: border-box;
 }
 
+a{
+    color: #ccc;
+    text-decoration: none;
+}
+
 .navbar{
-    height: 3vh;
+    height: 50px;
     width: 100%;
     background-color: rgb(54, 54, 54);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+#logo{
+    margin-left: 25px;
+    width: 33%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#logo a{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 26px;
+    line-height: 1;
+    font-weight: bold;
+}
+
+#logo a svg{
+    width: 35px;
+    height: 35px;
+    display: block;
+}
+
+#nav-but{
+    width: 67%;
+    height: 80%;
+    margin-right: 25px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.links{
+    height: 100%;
+    width: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.links:hover{
+    background-color: #ccc;
+    color: rgb(54, 54, 54);
 }
 
 #map{
-    height: 97vh;
+    height: calc(100vh - 50px);
     width: 100%;
 }
 
-.leaflet-control.custom-zoom {
+.leaflet-control.leaflet-container {
     display: flex;
     flex-direction: column;
     background: transparent;
-    border: 1px solid #ccc;
     border-radius: 4px;
     overflow: hidden;
 }
 
-.leaflet-control.custom-zoom .zoom-btn {
+.leaflet-control.leaflet-container .control-button {
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: rgb(54, 54, 54);
     opacity: 0.8;
     border: 1px solid #ccc;
+    border-radius: 4px;
     width: 34px;
     height: 34px;
     cursor: pointer;
@@ -39,18 +96,28 @@
     transition: background-color 0.15s, transform 0.1s;
 }
 
-.leaflet-control.custom-zoom .zoom-btn svg {
+.leaflet-control.leaflet-container .control-button svg {
     width: 18px;
     height: 18px;
     margin: 0;
     pointer-events: none;
 }
 
-.leaflet-control.custom-zoom .zoom-btn:hover {
+.leaflet-control.leaflet-container .control-button:hover {
     background-color: #181818;
 }
 
-.leaflet-control.custom-zoom .zoom-btn:active {
+.leaflet-control.leaflet-container .control-button:active {
     background-color: #e0e0e0;
     transform: scale(0.96);
+}
+
+.leaflet-control.leaflet-container.active .control-button{
+    background-color: #ccc;
+    border: 1px solid rgb(54, 54, 54);
+    border-radius: 4px;
+}
+
+.leaflet-control.leaflet-container.active .control-button svg{
+    fill: rgb(54, 54, 54);
 }
