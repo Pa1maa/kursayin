@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
 
 import { addZoom } from "../leaflet/leaflet_zoom.js"
 import { addMarkers } from "../leaflet/leaflet_marker.js"
+import { addLocate } from "../leaflet/leaflet_locate.js"
 
 const map = L.map("map", { zoomControl: false }).setView([40.1792, 44.4991], 14)
 
@@ -45,4 +46,5 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 addZoom(map)
+addLocate(map)
 addMarkers(map)

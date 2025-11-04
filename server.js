@@ -9,6 +9,9 @@ const multer = require("multer")
 const bcrypt = require("bcrypt")
 const cors = require("cors")
 const User = require("./models/User.js")
+const passport = require("passport")
+const authRoutes = require("./routes/auth.js")
+const markerRoutes = require("./routes/markers.js")
 
 dotenv.config()
 const app = express()
@@ -43,6 +46,9 @@ app.use(session({
     }),
     cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }))
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 async function authRequired(req, res, next){
     if(!req.session.userId){
@@ -135,8 +141,8 @@ app.get("/me", (req, res)=>{
     res.sendFile(path.join(__dirname, "public", "account", "acc.html"))
 })
 
-const authRoutes = require("./routes/auth.js")
 app.use("/auth", authRoutes)
+app.use("/mark", markerRoutes)
 
 app.get("/", (req, res)=>{
     res.sendFile(path.join(__dirname, "public", "main", "index.html"))
