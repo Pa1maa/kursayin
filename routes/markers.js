@@ -35,7 +35,7 @@ router.post("/marker", isAuthenticated, async (req, res)=>{
             res.status(400).json({ success: false, message: "Missing data" })
         }
 
-        const marker = UserMarker.create({
+        const marker = await UserMarker.create({
             userId: req.user._id,
             lat,
             lng,

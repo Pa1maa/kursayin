@@ -1,3 +1,5 @@
+import { ButtonManager } from "../buttonManager.js"
+
 export function addLocate(map){
     const Locate = L.Control.extend({
         options: {
@@ -15,17 +17,18 @@ export function addLocate(map){
                                 <path d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103z"/>
                             </svg>`
 
+            ButtonManager.addButton("locateUser", loc)
+
             let locating = false
             let marker = null
+
             L.DomEvent.on(loc, "click", L.DomEvent.stopPropagation).on(loc, "click", L.DomEvent.preventDefault).on(loc, "click", ()=>{
                 if(!navigator.geolocation){
                     alert("Geolocation is not supported by your browser")
                     return
                 }
 
-                locating = !locating
-
-                if(locating){
+                if(!loc.classList.contains("active")){
                     loc.classList.add("active")
                     navigator.geolocation.getCurrentPosition(
                         (pos)=>{
@@ -53,5 +56,5 @@ export function addLocate(map){
         }
     })
 
-    map.addControl(new Locate())
+    map.addControl(new Locate)
 }

@@ -1,3 +1,5 @@
+import { ButtonManager } from "../buttonManager.js"
+
 export function addMarkers(map){
     const Markers = L.Control.extend({
         options: {
@@ -23,13 +25,14 @@ export function addMarkers(map){
                             </svg>`
 
             let marker = null
-            let placing = false
 
             async function isAuthenticated(){
                 const res = await fetch("/auth/me")
                 const data = await res.json()
                 return data.success
             }
+
+            ButtonManager.addButton("addUserMarker", but)
             
             function onMapClick(e){
                 if(marker){
@@ -46,10 +49,11 @@ export function addMarkers(map){
             }
 
             L.DomEvent.on(but, "click", L.DomEvent.stopPropagation).on(but, "click", L.DomEvent.preventDefault).on(but, "click", ()=>{
-                placing = !placing
-
-                if(placing === true){
+                if(!but.classList.contains("active")){
                     but.classList.add("active")
+
+                    ButtonManager.disableButton("showUserMarker")
+
                     map.on("click", onMapClick)
                 }
                 else{

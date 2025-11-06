@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
         const password = document.getElementById("password").value
         const confirm = document.getElementById("confirmPassword").value
 
-        if(confirm === password){
+        if(confirm === password && password.length >= 8){
             const res = await fetch("/auth/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -22,7 +22,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
             }
         }
         else{
-            document.getElementById("message").textContent = "Passwords are not the same"
+            if(confirm != password){
+                document.getElementById("message").textContent = "Passwords are not the same"
+            }
+            else if(password.length < 8){
+                document.getElementById("message").textContent = "Password has to contain at least 8 characters"
+            }
         }
     })
 })
