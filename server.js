@@ -12,6 +12,7 @@ const User = require("./models/User.js")
 const passport = require("passport")
 const authRoutes = require("./routes/auth.js")
 const markerRoutes = require("./routes/markers.js")
+const publicMarkerRoutes = require("./routes/publicMarkers.js")
 
 dotenv.config()
 const app = express()
@@ -143,6 +144,7 @@ app.get("/me", (req, res)=>{
 
 app.use("/auth", authRoutes)
 app.use("/mark", markerRoutes)
+app.use("/public", publicMarkerRoutes)
 
 app.get("/", (req, res)=>{
     res.sendFile(path.join(__dirname, "public", "main", "index.html"))

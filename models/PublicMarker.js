@@ -9,4 +9,4 @@ const PublicMarkerSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now() }
 })
 
-export default mongoose.model("PublicMarker", PublicMarkerSchema)
+module.exports = mongoose.model("PublicMarkers", PublicMarkerSchema)

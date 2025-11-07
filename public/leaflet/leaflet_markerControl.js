@@ -9,6 +9,7 @@ export function addMarkerControls(map){
         onAdd: function(map){
             const container = L.DomUtil.create("div", "leaflet-control leaflet-container")
             const show = L.DomUtil.create("a", "control-button", container)
+            const published = L.DomUtil.create("a", "control-button active", container)
             const del = L.DomUtil.create("a", "control-button", container)
 
             show.href = "#"
@@ -16,6 +17,13 @@ export function addMarkerControls(map){
             show.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ccc" class="bi bi-map-fill" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.598-.49L10.5.99 5.598.01a.5.5 0 0 0-.196 0l-5 1A.5.5 0 0 0 0 1.5v14a.5.5 0 0 0 .598.49l4.902-.98 4.902.98a.5.5 0 0 0 .196 0l5-1A.5.5 0 0 0 16 14.5zM5 14.09V1.11l.5-.1.5.1v12.98l-.402-.08a.5.5 0 0 0-.196 0zm5 .8V1.91l.402.08a.5.5 0 0 0 .196 0L11 1.91v12.98l-.5.1z"/>
                             </svg>`
+
+            published.href = "#"
+            published.title = "Show published markers"
+            published.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ccc" class="bi bi-pin-map-fill" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8z"/>
+                                        <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
+                                    </svg>`
 
             del.href = "#"
             del.title = "Delete one marker"
@@ -31,15 +39,16 @@ export function addMarkerControls(map){
 
             ButtonManager.addButton("showUserMarker", show)
             ButtonManager.addButton("delUserMarker", del)
+            ButtonManager.addButton("showPublicMarker", published)
 
             let allMarkerArr = []
             
             L.DomEvent.on(show, "click", L.DomEvent.stopPropagation).on(show, "click", L.DomEvent.preventDefault).on(show, "click", async ()=>{
-
                 if(!show.classList.contains("active")){
                     show.classList.add("active")
 
                     ButtonManager.disableButton("addUserMarker")
+                    ButtonManager.disableButton("showPublicMarker")
 
                     let markers = []
 
@@ -61,6 +70,48 @@ export function addMarkerControls(map){
                 }
                 else{
                     show.classList.remove("active")
+                    for(let i = 0; i < allMarkerArr.length; i++){
+                        allMarkerArr[i].remove()
+                    }
+                    allMarkerArr = []
+
+                    if(del.classList.contains("active")){
+                        del.classList.remove("active")
+                    }
+                }
+            })
+
+            L.DomEvent.on(published, "click", L.DomEvent.stopPropagation).on(published, "click", L.DomEvent.preventDefault).on(published, "click", async ()=>{
+                ButtonManager.disableButton("showUserMarker")
+                ButtonManager.disableButton("addUserMarker")
+
+                let markers = []
+
+                if(!published.classList.contains("active")){
+                    published.classList.add("active")
+
+                    const res = await fetch("/public/markers", { credentials: "include" })
+                    const data = await res.json()
+                    markers = data.markers || []
+
+                    for(let i = 0; i < markers.length; i++){
+                        const marker = L.marker([markers[i].lat, markers[i].lng]).addTo(map)
+                        marker.bindPopup(markers[i].name, { autoClose: false }).openPopup()
+                        marker._id = markers[i]._id
+                        allMarkerArr.push(marker)
+
+                        // marker.on("click", async ()=>{
+                        //     const sideDiv = document.createElement("div")
+                        //     sideDiv.style.width = "400px"
+                        //     sideDiv.style.height = "100%"
+                        //     sideDiv.style.backgroundColor = "blue"
+
+                        //     map.appendChild(sideDiv)
+                        // })
+                    }
+                }
+                else{
+                    published.classList.remove("active")
                     for(let i = 0; i < allMarkerArr.length; i++){
                         allMarkerArr[i].remove()
                     }

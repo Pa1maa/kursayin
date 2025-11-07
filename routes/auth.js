@@ -3,10 +3,10 @@ const router = express.Router()
 const User = require("../models/User")
 const bcrypt = require("bcrypt")
 
-router.post("/signup", async (req, res)=>{  
+router.post("/signup", async (req, res)=>{
     const { username, email, password } = req.body
     try{
-        const existingUser = await User.findOne({ $or: [ {email: email }, {username: username } ] })
+        const existingUser = await User.findOne({ $or: [ { email: email }, { username: username } ] })
         if(existingUser) return res.status(400).json({ message: "User already exists", success: false })
 
         const newUser = new User({ username, email, password })
