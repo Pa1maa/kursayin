@@ -8,8 +8,8 @@ export function addMarkerControls(map){
 
         onAdd: function(map){
             const container = L.DomUtil.create("div", "leaflet-control leaflet-container")
-            const show = L.DomUtil.create("a", "control-button", container)
             const published = L.DomUtil.create("a", "control-button", container)
+            const show = L.DomUtil.create("a", "control-button", container)
             const del = L.DomUtil.create("a", "control-button", container)
 
             show.href = "#"
