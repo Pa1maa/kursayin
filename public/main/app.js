@@ -1,3 +1,8 @@
+import { addZoom } from "../leaflet/leaflet_zoom.js"
+import { addMarkers } from "../leaflet/leaflet_marker.js"
+import { addLocate } from "../leaflet/leaflet_locate.js"
+import { addMarkerControls } from "../leaflet/leaflet_markerControl.js"
+
 document.addEventListener("DOMContentLoaded", async ()=>{
     const navBut = document.getElementById("nav-but")
 
@@ -33,10 +38,12 @@ document.addEventListener("DOMContentLoaded", async ()=>{
     }
 })
 
-import { addZoom } from "../leaflet/leaflet_zoom.js"
-import { addMarkers } from "../leaflet/leaflet_marker.js"
-import { addLocate } from "../leaflet/leaflet_locate.js"
-import { addMarkerControls } from "../leaflet/leaflet_markerControl.js"
+const image = document.getElementById("comAvatar")
+const a = document.getElementById("comUsername")
+
+image.addEventListener("click", ()=>{
+    window.location.href = a.href
+})
 
 const map = L.map("map", { zoomControl: false }).setView([40.1792, 44.4991], 14)
 

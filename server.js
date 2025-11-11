@@ -142,6 +142,10 @@ app.get("/me", (req, res)=>{
     res.sendFile(path.join(__dirname, "public", "account", "acc.html"))
 })
 
+app.get("/user", (req, res)=>{
+    res.sendFile(path.join(__dirname, "public", "publicAccount", "pacc.html"))
+})
+
 app.use("/auth", authRoutes)
 app.use("/mark", markerRoutes)
 app.use("/public", publicMarkerRoutes)

@@ -43,7 +43,7 @@ async function loadUser(){
 
     username.value = user.username || ""
     email.value = user.email || ""
-    age.value = user.age
+    age.value = user.age || null
     gender.value = user.gender || ""
 
     if(user.avatarPath){

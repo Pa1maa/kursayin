@@ -1,0 +1,147 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #ccc;
+}
+
+input{
+    width: 400px;
+    height: 50px;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 18px;
+    outline: none;
+    border: 1px solid rgb(54, 54, 54);
+    color: rgb(54, 54, 54);
+}
+
+a{
+    color: #ccc;
+    text-decoration: none;
+}
+
+h2{
+    font-size: 36px;
+}
+
+label{
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+#bg-video{
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    filter: brightness(0.5);
+}
+
+.navbar{
+    height: 50px;
+    width: 100%;
+    background-color: rgb(54, 54, 54);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+#logo{
+    margin-left: 25px;
+    width: 33%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#logo a{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 26px;
+    line-height: 1;
+    font-weight: bold;
+}
+
+#logo a svg{
+    width: 35px;
+    height: 35px;
+    display: block;
+}
+
+#nav-but{
+    width: 67%;
+    height: 80%;
+    margin-right: 25px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.links{
+    height: 100%;
+    width: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.links:hover{
+    background-color: #ccc;
+    color: rgb(54, 54, 54);
+}
+
+#gender{
+    width: 125px;
+}
+
+.container{
+    width: 100%;
+    height: calc(100vh - 50px);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+#image{
+    width: 35%;
+    height: 700px;
+    display: flex;
+    padding-top: 40px;
+    align-items: center;
+    flex-direction: column;
+    min-width: 450px;
+    min-height: 450px;
+    gap: 40px;  
+}
+
+#description{
+    width: 35%;
+    height: 700px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 100px;
+    gap: 15px;
+}
+
+.avatar-wrapper{
+    width: 450px;
+    height: 450px;
+}
+
+.avatar-wrapper img{
+    width: 100%;
+    height: 100%;
+}

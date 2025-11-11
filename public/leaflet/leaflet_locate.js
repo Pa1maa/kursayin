@@ -19,8 +19,8 @@ export function addLocate(map){
 
             ButtonManager.addButton("locateUser", loc)
 
-            let locating = false
             let marker = null
+            let circle = null
 
             L.DomEvent.on(loc, "click", L.DomEvent.stopPropagation).on(loc, "click", L.DomEvent.preventDefault).on(loc, "click", ()=>{
                 if(!navigator.geolocation){
@@ -35,7 +35,8 @@ export function addLocate(map){
                             const lat = pos.coords.latitude
                             const lng = pos.coords.longitude
                             map.setView([lat, lng], 15)
-                            marker = L.marker([lat, lng]).addTo(map).bindPopup("You are here!").openPopup()
+                            marker = L.marker([lat, lng]).addTo(map).bindPopup("You are within 2245 meters of this point!").openPopup()
+                            circle = L.circle([lat, lng], { radius: 2245, color: "#8c9cff", opacity: 0.3, stroke: false }).addTo(map)
                         },
                         (err)=>{
                             alert("Unable to retrieve your location.")
@@ -49,6 +50,8 @@ export function addLocate(map){
                     loc.classList.remove("active")
                     marker.remove()
                     marker = null
+                    circle.remove()
+                    circle = null
                 }
             })
 
