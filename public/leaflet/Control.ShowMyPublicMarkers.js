@@ -5,7 +5,7 @@ const comAvatar = document.getElementById("comAvatar")
 const idP = document.getElementById("idP")
 let user = null
 
-L.Control.ShowPublicMarkers = class extends L.Control {
+L.Control.ShowMyPublicMarkers = class extends L.Control {
     onAdd(map){
         this._map = map
         const container = L.DomUtil.create("div", "leaflet-control leaflet-container")
@@ -84,15 +84,7 @@ L.Control.ShowPublicMarkers = class extends L.Control {
         }
         else{
             alert("Please Login or Signup to continue")
-            this._mypublished.classList.remove("active")
-            for(let i = 0; i < this._markerArr.length; i++){
-                this._markerArr[i].remove()
-            }
-            this._markerArr = []
-
-            if(commentsUI.style.display === "block"){
-                commentsUI.style.display = "none"
-            }
+            this.deactivate()
         }
     }
 
