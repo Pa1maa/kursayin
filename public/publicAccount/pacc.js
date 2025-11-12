@@ -1,22 +1,13 @@
+import { getVar } from "../main/app.js"
+
 const avatar = document.getElementById("avatar")
 const username = document.getElementById("username")
 const email = document.getElementById("email")
 const age = document.getElementById("age")
 const gender = document.getElementById("gender")
 
-async function getElementFromFile() {
-    const res = await fetch("/public/main/index.html")
-    const text = await res.text()
-
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, "text/html")
-
-    const idP = doc.getElementById("idP")
-}
-
 async function loadUser(){
-    const userId = getElementFromFile()
-    const res = await fetch(`/public/user/${userId}`)
+    const res = await fetch(`/public/user/${getVar()}`)
     const data = await res.json()
     if(data.success){
         const user = data.user
@@ -30,3 +21,5 @@ async function loadUser(){
         }
     }
 }
+
+loadUser

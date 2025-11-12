@@ -1,10 +1,18 @@
 import { addZoom } from "../leaflet/leaflet_zoom.js"
-import { addMarkers } from "../leaflet/leaflet_marker.js"
 import { addLocate } from "../leaflet/leaflet_locate.js"
-import { addMarkerControls } from "../leaflet/leaflet_markerControl.js"
+import "../leaflet/Control.Marker.js"
+import "../leaflet/Control.SaveMarker.js"
+import "../leaflet/Control.PublishMarker.js"
+import "../leaflet/Control.ShowMarkers.js"
+import "../leaflet/Control.ShowPublicMarkers.js"
+import "../leaflet/Control.ShowMyPublicMarkers.js"
 
 document.addEventListener("DOMContentLoaded", async ()=>{
     const navBut = document.getElementById("nav-but")
+    const image = document.getElementById("comAvatar")
+    const a = document.getElementById("comUsername")
+    const closeUI = document.getElementById("closeUI")
+    const commentsUI = document.getElementById("comments")
 
     try{
         const res = await fetch("/auth/me")
@@ -36,14 +44,23 @@ document.addEventListener("DOMContentLoaded", async ()=>{
             <a href="/signup" class="links">Sign up</a>
         `
     }
+
+    closeUI.addEventListener("click", ()=>{
+        commentsUI.style.display = "none"
+    })
+
+    image.addEventListener("click", ()=>{
+        window.location.href = a.href
+    })
+
+    a.addEventListener("click", () => getVar())
 })
 
-const image = document.getElementById("comAvatar")
-const a = document.getElementById("comUsername")
-
-image.addEventListener("click", ()=>{
-    window.location.href = a.href
-})
+export function getVar(){
+    const id = document.getElementById("idP").innerText
+    alert(id)
+    return id
+}
 
 const map = L.map("map", { zoomControl: false }).setView([40.1792, 44.4991], 14)
 
@@ -51,9 +68,20 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     minZoom: 4,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
+}).addTo(map)
+
+const markerControl = new L.Control.Marker()
+const saveMarker = new L.Control.SaveMarker(markerControl)
+const publishMarker = new L.Control.PublishMarker(markerControl)
+const showMarkers = new L.Control.ShowMarkers()
+const showPublicMarker = new L.Control.ShowPublicMarkers()
+const showMyPublicMarkers = new L.Control.showMyPublicMarkers()
 
 addZoom(map)
 addLocate(map)
-addMarkers(map)
-addMarkerControls(map)
+markerControl.addTo(map)
+saveMarker.addTo(map)
+publishMarker.addTo(map)
+showMarkers.addTo(map)
+showPublicMarker.addTo(map)
+showMyPublicMarkers.addTo(map)
