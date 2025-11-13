@@ -30,7 +30,7 @@ L.Control.SaveMarker = class extends L.Control {
 
     async _clicked(){
         if(!this.markerControl._marker){
-            alert(this.markerControl._marker)
+            alert("Place a marker first!")
             return
         }
 

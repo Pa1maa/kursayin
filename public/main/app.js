@@ -50,16 +50,15 @@ document.addEventListener("DOMContentLoaded", async ()=>{
     })
 
     image.addEventListener("click", ()=>{
+        storeVar(a)
         window.location.href = a.href
     })
 
-    a.addEventListener("click", () => getVar())
+    a.addEventListener("click", ()=> storeVar(a))
 })
 
-export function getVar(){
-    const id = document.getElementById("idP").innerText
-    alert(id)
-    return id
+function storeVar(element){
+    localStorage.setItem("username", element.innerText)
 }
 
 const map = L.map("map", { zoomControl: false }).setView([40.1792, 44.4991], 14)

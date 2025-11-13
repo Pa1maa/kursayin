@@ -28,6 +28,7 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
         this._mypublished.classList.add("active")
         this._active = true
         await this._addMarkers()
+        await this._deleteMarkers()
     }
 
     deactivate(){
@@ -64,7 +65,7 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
                 this._markerArr.push(marker)
 
                 marker.on("click", async ()=>{
-                    const res = await fetch("/public/getuser")
+                    const res = await fetch(`/users/getuser?id=${marker._id}`)
                     const data = await res.json()
                     if(data.success){
                         user = data.user
@@ -77,7 +78,7 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
                     commentsUI.style.display = "block"
                     userComP.innerText = markers[i].comment
                     comAvatar.src = user.avatarPath
-                    comUsername.innerHTML = `${user.username}`
+                    comUsername.innerHTML = user.username
                     idP.innerText = user._id
                 })
             }
@@ -96,6 +97,30 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
 
         if(commentsUI.style.display === "block"){
             commentsUI.style.display = "none"
+        }
+    }
+
+    async _deleteMarkers(){
+        if(this._active){
+            for(let i = 0; i < this._markerArr.length; i++){
+                this._markerArr[i].on("dblclick", async ()=>{
+                    if(!confirm("Are you sure?")) return
+
+                    this._markerArr[i].remove()
+
+                    if(await this._authenticated()){
+                        await fetch(`/public/markers/${this._markerArr[i]._id}`, {
+                            method: "DELETE",
+                            headers: { "Content-Type": "application/json" }
+                        })
+                        this._markerArr.splice(i, 1)
+                    }
+                    else{
+                        alert("Please Login or Signup to continue")
+                        return
+                    }
+                })
+            }
         }
     }
 

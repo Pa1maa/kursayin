@@ -39,8 +39,16 @@ L.Control.PublishMarker = class extends L.Control {
             const lat = marker.getLatLng().lat
             const lng = marker.getLatLng().lng
             let name = prompt("Enter location's name")
-            if(!name) name = "Marked location"
-            let comment
+            if(!name){
+                let user = await this._getMyself()
+                if(user.username.at(-1) !== "s"){
+                    name = user.username + "'s location"
+                }
+                else{
+                    name = user.username + "' location"
+                }
+            }
+            let comment = null
             while(!comment){
                 comment = prompt("Your comment about this location: ")
             }
@@ -63,6 +71,12 @@ L.Control.PublishMarker = class extends L.Control {
         else{
             alert("Login or Signup for publishing markers")
         }
+    }
+
+    async _getMyself(){
+        const res = await fetch("/auth/me")
+        const data = await res.json()
+        return data.user
     }
 
     async _authenticated(){

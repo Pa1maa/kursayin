@@ -1,13 +1,18 @@
-import { getVar } from "../main/app.js"
-
 const avatar = document.getElementById("avatar")
 const username = document.getElementById("username")
 const email = document.getElementById("email")
 const age = document.getElementById("age")
 const gender = document.getElementById("gender")
+let name_ = localStorage.getItem("username")
+
+if(!name_) console.warn("No username selected")
 
 async function loadUser(){
-    const res = await fetch(`/public/user/${getVar()}`)
+    const res = await fetch(`/users/user`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: name_ })
+    })
     const data = await res.json()
     if(data.success){
         const user = data.user
@@ -20,6 +25,11 @@ async function loadUser(){
             avatar.src = user.avatarPath
         }
     }
+    else{
+        alert(data.message)
+    }
 }
 
-loadUser
+document.addEventListener("DOMContentLoaded", async ()=>{
+    await loadUser()
+})

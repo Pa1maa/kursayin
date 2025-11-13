@@ -18,7 +18,8 @@ export function addLocate(map){
             let marker = null
             let circle = null
 
-            L.DomEvent.on(loc, "click", L.DomEvent.stopPropagation).on(loc, "click", L.DomEvent.preventDefault).on(loc, "click", ()=>{
+            L.DomEvent.on(loc, "click", (e)=>{
+                L.DomEvent.stop(e)
                 if(!navigator.geolocation){
                     alert("Geolocation is not supported by your browser")
                     return
@@ -30,9 +31,10 @@ export function addLocate(map){
                         (pos)=>{
                             const lat = pos.coords.latitude
                             const lng = pos.coords.longitude
+                            const acc = Math.round(pos.coords.accuracy)
                             map.setView([lat, lng], 15)
-                            marker = L.marker([lat, lng]).addTo(map).bindPopup("You are within 2245 meters of this point!").openPopup()
-                            circle = L.circle([lat, lng], { radius: 2245, color: "#8c9cff", opacity: 0.3, stroke: false }).addTo(map)
+                            marker = L.marker([lat, lng]).addTo(map).bindPopup(`You are within ${acc} meters of this point!`).openPopup()
+                            circle = L.circle([lat, lng], { radius: acc, color: "#8c9cff", opacity: 0.3, stroke: false }).addTo(map)
                         },
                         (err)=>{
                             alert("Unable to retrieve your location.")

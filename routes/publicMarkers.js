@@ -88,29 +88,4 @@ router.get("/mymarker", isAuthenticated, async (req, res)=>{
     }
 })
 
-router.get("/user/:id", async (req, res)=>{
-    const user = await User.findOne({ _id: req.params.id })
-
-    if(!user) return res.status(404).json({ success: false, message: "User not found" })
-    
-    res.json({ success: true, user: user })
-})
-
-router.get("/getuser", async (req, res)=>{
-    try{
-        const marker = await PublicMarker.findOne({ id: req.params.id })
-        const comUser = await User.findOne({ _id: marker.userId })
-
-        if(!comUser){
-            return res.status(404).json({ success: false, message: "User not found" })
-        }
-
-        res.json({ success: true, user: comUser })
-    }
-    catch(err){
-        console.error(err)
-        res.status(500).json({ success: false, message: err.message })
-    }
-})
-
 module.exports = router

@@ -4,9 +4,9 @@ L.Control.ShowMarkers = class extends L.Control {
         const container = L.DomUtil.create("div", "leaflet-control leaflet-container")
         this._show = L.DomUtil.create("a", "control-button", container)
         this._show.href = "#"
-        this._show.title = "Show your markers"
-        this._show.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ccc" class="bi bi-map-fill" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.598-.49L10.5.99 5.598.01a.5.5 0 0 0-.196 0l-5 1A.5.5 0 0 0 0 1.5v14a.5.5 0 0 0 .598.49l4.902-.98 4.902.98a.5.5 0 0 0 .196 0l5-1A.5.5 0 0 0 16 14.5zM5 14.09V1.11l.5-.1.5.1v12.98l-.402-.08a.5.5 0 0 0-.196 0zm5 .8V1.91l.402.08a.5.5 0 0 0 .196 0L11 1.91v12.98l-.5.1z"/>
+        this._show.title = "Show saved markers"
+        this._show.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ccc" class="bi bi-bookmark-fill" viewBox="0 0 16 16">
+                                    <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2"/>
                                 </svg>`
 
         this._markerArr = []
@@ -21,6 +21,7 @@ L.Control.ShowMarkers = class extends L.Control {
         this._show.classList.add("active")
         this._active = true
         await this._addMarkers()
+        await this._deleteMarkers()
     }
 
     deactivate(){
@@ -71,6 +72,40 @@ L.Control.ShowMarkers = class extends L.Control {
             this._markerArr[i].remove()
         }
         this._markerArr = []
+    }
+
+    async _deleteMarkers(){
+        if(this._active){
+            let markers = []
+            for(let i = 0; i < this._markerArr.length; i++){
+                const latlng = this._markerArr[i].getLatLng()
+
+                this._markerArr[i].on("dblclick", async ()=>{
+                    if(!confirm("Are you sure?")) return
+
+                    this._markerArr[i].remove()
+
+                    if(await this._authenticated()){
+                        await fetch(`/mark/markers/${this._markerArr[i]._id}`, {
+                            method: "DELETE",
+                            headers: { "Content-Type": "application/json" }
+                        })
+                    }
+                    else{
+                        markers = JSON.parse(localStorage.getItem("markers") || "[]")   
+                        for(let j = 0; j < markers.length; j++){
+                            if(latlng.lat === markers[j].lat && latlng.lng === markers[j].lng){
+                                markers.splice(j, 1)
+                                break
+                            }
+                        }
+                        localStorage.setItem("markers", JSON.stringify(markers))
+                    }
+
+                    this._markerArr.splice(i, 1)
+                })
+            }
+        }
     }
 
     async _authenticated(){
