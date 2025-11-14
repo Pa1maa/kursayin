@@ -1,4 +1,10 @@
-document.addEventListener("DOMContentLoaded", ()=>{
+document.addEventListener("DOMContentLoaded", async ()=>{
+    const res = await fetch("/auth/me")
+    const data = await res.json()
+    if(data.success){
+        window.location.href = "/"
+        return
+    }
     document.getElementById("signupForm").addEventListener("submit", async (e)=>{
         e.preventDefault()
         const username = document.getElementById("username").value

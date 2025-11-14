@@ -11,6 +11,7 @@ L.Control.Marker = class extends L.Control {
 
         this._active = false;
         this._marker = null;
+        this._others = []
 
         this._addDomEvents();
         return container;
@@ -19,6 +20,7 @@ L.Control.Marker = class extends L.Control {
     activate() {
         if (this._active) return;
 
+        this._deactivateOthers()
         this._link.classList.add("active");
         this._map.on("click", this._onMapClick, this);
         this._active = true;
@@ -39,6 +41,14 @@ L.Control.Marker = class extends L.Control {
 
     reset() {
         this.deactivate();
+    }
+
+    _deactivateOthers(){
+        if(Array.isArray(this._others)){
+            for(let i = 0; i < this._others.length; i++){
+                this._others[i].reset()
+            }
+        }
     }
 
     _addDomEvents() {

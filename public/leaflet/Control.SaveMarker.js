@@ -17,6 +17,8 @@ L.Control.SaveMarker = class extends L.Control {
                                     <path d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5zM9 1h2v4H9z"/>
                                 </svg>`
 
+        container.style.marginTop = "0px"
+
         this._addDomevents()
         return container
     }

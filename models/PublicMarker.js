@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
-const PublicMarkerSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, res: "User" },
+const publicMarkerSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     lat: { type: Number, required: true },
     lng: {type: Number, required: true },
     name: { type: String, required: true },
@@ -9,4 +9,4 @@ const PublicMarkerSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now() }
 })
 
-module.exports = mongoose.model("PublicMarkers", PublicMarkerSchema)
+module.exports = mongoose.model("PublicMarkers", publicMarkerSchema)

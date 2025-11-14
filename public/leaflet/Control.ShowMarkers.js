@@ -11,6 +11,8 @@ L.Control.ShowMarkers = class extends L.Control {
 
         this._markerArr = []
         this._active = false
+        this._others = []
+
         this._addDomEvents()
         return container
     }
@@ -18,6 +20,7 @@ L.Control.ShowMarkers = class extends L.Control {
     async activate(){
         if (this._active) return
 
+        this._deactivateOthers()
         this._show.classList.add("active")
         this._active = true
         await this._addMarkers()
@@ -38,6 +41,14 @@ L.Control.ShowMarkers = class extends L.Control {
 
     async toggle(){
         this._active ? this.deactivate() : await this.activate()
+    }
+
+    _deactivateOthers(){
+        if(Array.isArray(this._others)){
+            for(let i = 0; i < this._others.length; i++){
+                this._others[i].reset()
+            }
+        }
     }
 
     _addDomEvents(){
@@ -64,6 +75,11 @@ L.Control.ShowMarkers = class extends L.Control {
             marker.bindPopup(markers[i].name, { autoClose: false }).openPopup()
             marker._id = markers[i]._id
             this._markerArr.push(marker)
+
+            marker.off("click")
+            marker.on("click", ()=>{
+                marker.openPopup()
+            })
         }
     }
 

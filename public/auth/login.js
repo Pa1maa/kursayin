@@ -1,4 +1,10 @@
-document.addEventListener("DOMContentLoaded", ()=>{
+document.addEventListener("DOMContentLoaded", async ()=>{
+    const res = await fetch("/auth/me")
+    const data = await res.json()
+    if(data.success){
+        window.location.href = "/"
+        return
+    }
     document.getElementById("loginForm").addEventListener("submit", async (e)=>{
         e.preventDefault()
         const email = document.getElementById("email").value

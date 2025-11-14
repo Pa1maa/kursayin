@@ -14,6 +14,7 @@ const authRoutes = require("./routes/auth.js")
 const markerRoutes = require("./routes/markers.js")
 const publicMarkerRoutes = require("./routes/publicMarkers.js")
 const userRoutes = require("./routes/user.js")
+const replyRoutes = require("./routes/reply.js")
 
 dotenv.config()
 const app = express()
@@ -151,6 +152,7 @@ app.use("/auth", authRoutes)
 app.use("/mark", markerRoutes)
 app.use("/public", publicMarkerRoutes)
 app.use("/users", userRoutes)
+app.use("/reply", replyRoutes)
 
 app.get("/", (req, res)=>{
     res.sendFile(path.join(__dirname, "public", "main", "index.html"))

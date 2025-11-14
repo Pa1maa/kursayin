@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-const { type } = require("os")
 
 const userMarkerSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
