@@ -14,8 +14,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
     const closeUI = document.getElementById("closeUI")
     const commentsUI = document.getElementById("comments")
     const replyBut = document.getElementById("replyBut")
-    const overlays = document.getElementsByClassName("overlay")
-    const overlay = overlays[0]
+    const replyDiv = document.getElementById("replyDiv")
 
     try{
         const res = await fetch("/auth/me")
@@ -82,17 +81,15 @@ document.addEventListener("DOMContentLoaded", async ()=>{
         if(data.success){
             const div = document.createElement("div")
             div.classList.add("replys")
-            overlay.appendChild(div)
+            replyDiv.appendChild(div)
             const userDetails = document.createElement("div")
             userDetails.id = "user"
             div.appendChild(userDetails)
             const userImg = document.createElement("img")
             userImg.alt = "Avatar"
             userImg.src = userdata.user.avatarPath
-            // userImg.id = "comAvatar"
             userDetails.appendChild(userImg)
             const username = document.createElement("a")
-            // username.id = "comUsername"
             username.href = "/user"
             username.innerText = userdata.user.username
             userDetails.appendChild(username)

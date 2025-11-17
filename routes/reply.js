@@ -21,7 +21,9 @@ async function isAuthenticated(req, res, next){
 
 router.get("/replys", async (req, res)=>{
     try{
-        const { markerId } = req.body
+        const { markerId } = req.query
+        if(!markerId) return res.status(400).json({ success: false, message: "Marker ID not found" })
+
         const replys = await Reply.find({ markerId: markerId }).populate("userId").populate("markerId").sort({ createdAt: 1 })
         res.json({ success: true, replys: replys })
     }
@@ -33,7 +35,7 @@ router.get("/replys", async (req, res)=>{
 
 router.post("/reply", isAuthenticated, async (req, res)=>{
     try{
-        const { markerId, reply } = req.query
+        const { markerId, reply } = req.body
 
         if(!markerId || !reply){
             return res.status(400).json({ success: false, message: "Missing required fields" })

@@ -3,6 +3,7 @@ const userComP = document.getElementById("userComP")
 const comUsername = document.getElementById("comUsername")
 const comAvatar = document.getElementById("comAvatar")
 const idP = document.getElementById("idP")
+const replyDiv = document.getElementById("replyDiv")
 let user = null
 
 L.Control.ShowPublicMarkers = class extends L.Control {
@@ -83,6 +84,7 @@ L.Control.ShowPublicMarkers = class extends L.Control {
             marker.off("click")
             marker.on("click", async ()=>{
                 marker.openPopup()
+                replyDiv.innerHTML = ""
                 const res = await fetch(`/users/getuser?id=${marker._id}`)
                 const data = await res.json()
                 if(data.success){
@@ -104,24 +106,22 @@ L.Control.ShowPublicMarkers = class extends L.Control {
                     comAvatar.src = "../assets/sbcf-default-avatar.png"
                 }
 
-                const resReply = await fetch(`/reply/replys?${marker._id}`)
+                const resReply = await fetch(`/reply/replys?markerId=${marker._id}`)
                 const dataReply = await resReply.json()
                 const replys = dataReply.replys
 
                 for(let i = 0; i < replys.length; i++){
                     const div = document.createElement("div")
                     div.classList.add("replys")
-                    overlay.appendChild(div)
+                    replyDiv.appendChild(div)
                     const userDetails = document.createElement("div")
                     userDetails.id = "user"
                     div.appendChild(userDetails)
                     const userImg = document.createElement("img")
                     userImg.alt = "Avatar"
                     userImg.src = replys[i].userId.avatarPath
-                    // userImg.id = "comAvatar"
                     userDetails.appendChild(userImg)
                     const username = document.createElement("a")
-                    // username.id = "comUsername"
                     username.href = "/user"
                     username.innerText = replys[i].userId.username
                     userDetails.appendChild(username)
@@ -132,7 +132,7 @@ L.Control.ShowPublicMarkers = class extends L.Control {
                     div.appendChild(userReply)
                     const replyP = document.createElement("p")
                     replyP.id = "userComP"
-                    replyP = replys[i].reply
+                    replyP.innerText = replys[i].reply
                     userReply.appendChild(replyP)
                 }
             })
