@@ -138,7 +138,13 @@ function storeVar(element){
 }
 
 const layers = document.getElementById("layers")
-const tilesArr = ["https://tile.openstreetmap.org/{z}/{x}/{y}.png", "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", "https://{s}.tile.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png", "https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", "https://tiles.openstreetmap.us/raster/hillshade.json"]
+const tilesArr = [
+    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+    "https://{s}.tile.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png",
+    "https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png",
+    "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
+]
 const map = L.map("map", { zoomControl: false }).setView([40.1792, 44.4991], 14)
 let curTileInd = 0
 
