@@ -147,20 +147,20 @@ a{
 
 .overlay .top h1{
     color: #ccc;
-    font-size: 36px;
+    font-size: 30px;
 }
 
 .overlay .top a{
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .overlay .top a svg{
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
 }
 
 #comment{
@@ -207,6 +207,7 @@ a{
 #user img{
     height: 90%;
     aspect-ratio: 1 / 1;
+    border-radius: 50%;
 }
 
 #user img:hover{
@@ -218,7 +219,9 @@ a{
     height: 30px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     border-top: 1px solid rgb(54, 54, 54);
+    padding: 7px;
 }
 
 .replys{
@@ -242,5 +245,5 @@ a{
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    border-top: solid 1px #181818;
+    border-top: solid 1px rgb(54, 54, 54);
 }

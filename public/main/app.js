@@ -13,9 +13,9 @@ document.addEventListener("DOMContentLoaded", async ()=>{
     const a = document.getElementById("comUsername")
     const closeUI = document.getElementById("closeUI")
     const commentsUI = document.getElementById("comments")
-    const replyBut = document.getElementById("replyBut")
+    const replyBut = document.getElementById("replyA")
     const replyDiv = document.getElementById("replyDiv")
-    const replyDelete = document.getElementsByClassName("replyDelete")
+    const toggleReplies = document.getElementById("toggleReplies")
 
     try{
         const res = await fetch("/auth/me")
@@ -47,6 +47,21 @@ document.addEventListener("DOMContentLoaded", async ()=>{
             <a href="/signup" class="links">Sign up</a>
         `
     }
+
+    toggleReplies.addEventListener("click", ()=>{
+        if(replyDiv.style.display !== "none"){
+            replyDiv.style.display = "none"
+            toggleReplies.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" stroke="currentColor" stroke-width="1.5" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                                        </svg>`
+        }
+        else{
+            replyDiv.style.display = "flex"
+            toggleReplies.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" stroke="currentColor" stroke-width="1.5" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+                                        </svg>`
+        }
+    })
 
     closeUI.addEventListener("click", ()=>{
         commentsUI.style.display = "none"
@@ -104,6 +119,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
             const replyP = document.createElement("p")
             replyP.id = "userComP"
             userReply.appendChild(replyP)
+
             const deleteDiv = document.createElement("div")
             deleteDiv.classList.add("deleteDiv")
             userReply.appendChild(deleteDiv)
@@ -121,13 +137,29 @@ function storeVar(element){
     localStorage.setItem("username", element.innerText)
 }
 
+const layers = document.getElementById("layers")
+const tilesArr = ["https://tile.openstreetmap.org/{z}/{x}/{y}.png", "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", "https://{s}.tile.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png", "https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", "https://tiles.openstreetmap.us/raster/hillshade.json"]
 const map = L.map("map", { zoomControl: false }).setView([40.1792, 44.4991], 14)
+let curTileInd = 0
 
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    minZoom: 4,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map)
+let layer = L.tileLayer(tilesArr[curTileInd], {
+        maxZoom: 19,
+        minZoom: 4,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map)
+
+layers.addEventListener("click", ()=>{
+    curTileInd += 1
+    if(curTileInd >= tilesArr.length){
+        curTileInd = 0
+    }
+    map.removeLayer(layer)
+    layer = L.tileLayer(tilesArr[curTileInd], {
+            maxZoom: 19,
+            minZoom: 4,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map)
+})
 
 const markerControl = new L.Control.Marker()
 const saveMarker = new L.Control.SaveMarker(markerControl)

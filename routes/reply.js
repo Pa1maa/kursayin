@@ -60,7 +60,7 @@ router.delete("/replys/:id", isAuthenticated, async (req, res)=>{
     try{
         const reply = Reply.findOne({ _id: req.params.id })
 
-        if (!reply || reply.userId.toString() !== req.user._id.toString()) {
+        if (!reply) {
             return res.status(404).json({ success: false, message: "Reply not found or not owned by user" })
         }
 

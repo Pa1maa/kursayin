@@ -26,6 +26,7 @@
 
             <div id="nav-but">
                 <a href="/" class="links">Home</a>
+                <a href="#" class="links" id="layers">Layers</a>
             </div>
         </nav>
         
@@ -51,16 +52,19 @@
                 <div id="userCom">
                     <p id="userComP"></p>
                     <div id="replyBut">
-                        <a href="#" id="replyBut">Reply</a>
+                        <a href="#" id="replyA">Reply</a>
                     </div>
                 </div>
             </div>
             <div class="top">
                 <h1>Replies</h1>
+                <a href="#" id="toggleReplies">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" stroke="currentColor" stroke-width="1.5" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+                    </svg>
+                </a>
             </div>
-            <div id="replyDiv">
-
-            </div>
+            <div id="replyDiv"></div>
         </div>
         
         <script type="module" src="main/app.js"></script>
