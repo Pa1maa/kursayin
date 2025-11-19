@@ -155,10 +155,7 @@ let layer = L.tileLayer(tilesArr[curTileInd], {
     }).addTo(map)
 
 layers.addEventListener("click", ()=>{
-    curTileInd += 1
-    if(curTileInd >= tilesArr.length){
-        curTileInd = 0
-    }
+    curTileInd = (curTileInd + 1) % tilesArr.length
     map.removeLayer(layer)
     layer = L.tileLayer(tilesArr[curTileInd], {
             maxZoom: 19,
