@@ -9,21 +9,13 @@ import "../leaflet/Control.ShowMyPublicMarkers.js"
 
 document.addEventListener("DOMContentLoaded", async ()=>{
     const navBut = document.getElementById("nav-but")
-    const image = document.getElementById("comAvatar")
-    const a = document.getElementById("comUsername")
-    const closeUI = document.getElementById("closeUI")
-    const commentsUI = document.getElementById("comments")
-    const replyBut = document.getElementById("replyA")
-    const replyDiv = document.getElementById("replyDiv")
-    const toggleReplies = document.getElementById("toggleReplies")
-
     try{
         const res = await fetch("/auth/me")
         const data = await res.json()
 
         if(data.success){
             navBut.innerHTML += `
-                <a href="/me" id="acc-link" class="links">Account</a>
+            <a href="/me" id="acc-link" class="links">Account</a>
                 <a href="#" id="logout-link" class="links">Log out</a>
             `
 
@@ -31,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
                 e.preventDefault()
                 const res = await fetch("/auth/logout", { method: "POST", credentials: "include" })
                 const data = await res.json()
-
+                
                 if(data.success){
                     window.location.reload()
                 }
@@ -43,24 +35,39 @@ document.addEventListener("DOMContentLoaded", async ()=>{
     }
     catch{
         navBut.innerHTML += `
-            <a href="/login" class="links">Login</a>
-            <a href="/signup" class="links">Sign up</a>
+        <a href="/login" class="links">Login</a>
+        <a href="/signup" class="links">Sign up</a>
         `
     }
+    
+    const image = document.getElementById("comAvatar")
+    const a = document.getElementById("comUsername")
+    const closeUI = document.getElementById("closeUI")
+    const commentsUI = document.getElementById("comments")
+    const replyBut = document.getElementById("replyA")
+    const replyDiv = document.getElementById("replyDiv")
+    const toggleReplies = document.getElementById("toggleReplies")
+    const layers = document.getElementById("layers")
+    const share = document.getElementById("share")
 
     toggleReplies.addEventListener("click", ()=>{
         if(replyDiv.style.display !== "none"){
             replyDiv.style.display = "none"
-            toggleReplies.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" stroke="currentColor" stroke-width="1.5" class="bi bi-chevron-down" viewBox="0 0 16 16">
+            toggleReplies.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" stroke="#ccc" stroke-width="1.5" class="bi bi-chevron-down" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
                                         </svg>`
         }
         else{
             replyDiv.style.display = "flex"
-            toggleReplies.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" stroke="currentColor" stroke-width="1.5" class="bi bi-chevron-up" viewBox="0 0 16 16">
+            toggleReplies.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" stroke="#ccc" stroke-width="1.5" class="bi bi-chevron-up" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
                                         </svg>`
         }
+    })
+
+    layers.addEventListener("click", (e)=>{
+        e.preventDefault()
+        changeLayer()
     })
 
     closeUI.addEventListener("click", ()=>{
@@ -137,32 +144,84 @@ function storeVar(element){
     localStorage.setItem("username", element.innerText)
 }
 
-const layers = document.getElementById("layers")
+const map = L.map("map", { zoomControl: false }).setView([40.1792, 44.4991], 14)
 const tilesArr = [
     "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
-    "https://{s}.tile.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png",
-    "https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png",
-    "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
+    "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+    "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png",
+    "https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}.png",
+    "https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=ssJc9GV2uuuoBuiMJ6Fo",
 ]
-const map = L.map("map", { zoomControl: false }).setView([40.1792, 44.4991], 14)
+
+const getInd = parseInt(localStorage.getItem("curTileInd"), 10)
 let curTileInd = 0
+if(!isNaN(getInd) && getInd >= 0 && getInd < tilesArr.length){
+    curTileInd = getInd
+}
+else{
+    curTileInd = 0
+}
 
 let layer = L.tileLayer(tilesArr[curTileInd], {
-        maxZoom: 19,
-        minZoom: 4,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map)
+                maxZoom: 19,
+                minZoom: 4,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map)
 
-layers.addEventListener("click", ()=>{
+function changeLayer(){
     curTileInd = (curTileInd + 1) % tilesArr.length
     map.removeLayer(layer)
     layer = L.tileLayer(tilesArr[curTileInd], {
+                maxZoom: 19,
+                minZoom: 4,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map)
+
+    localStorage.setItem("curTileInd", curTileInd)
+}
+
+function createShareLink(map, curTileInd){
+    const center = map.getCenter()
+    const zoom = map.getZoom()
+
+    return `${location.origin}${location.pathname}?lat=${center.lat}&lng=${center.lng}&z=${zoom}&tile=${curTileInd}`
+}
+
+function loadMapState(map){
+    const params = new URLSearchParams(location.search)
+
+    const lat = parseFloat(params.get("lat"))
+    const lng = parseFloat(params.get("lng"))
+    const zoom = parseInt(params.get("z"))
+    const tile = parseInt(params.get("tile"))
+
+    if(!isNaN(lat) && !isNaN(lng) && !isNaN(zoom)){
+        map.setView([lat, lng], zoom)
+    }
+
+    if(!isNaN(tile) && tilesArr[tile]){
+        if(layer) map.removeLayer(layer)
+
+        layer = L.tileLayer(tilesArr[tile], {
             maxZoom: 19,
             minZoom: 4,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map)
-})
+    }
+}
+loadMapState(map)
+
+function copyShareLink(map, curTileInd){
+    const link = createShareLink(map, curTileInd)
+
+    navigator.clipboard.writeText(link)
+}
+
+function openShareMenu(shareDiv){
+    shareDiv.style.display = "block"
+    
+}
 
 const markerControl = new L.Control.Marker()
 const saveMarker = new L.Control.SaveMarker(markerControl)

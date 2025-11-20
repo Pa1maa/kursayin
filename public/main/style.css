@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: sans-serif;
 }
 
 a{
@@ -54,7 +55,7 @@ a{
 
 .links{
     height: 100%;
-    width: 5%;
+    width: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -193,11 +194,14 @@ a{
     justify-content: space-between;
     border: 1px solid rgb(54, 54, 54);
     background-image: linear-gradient(to bottom, rgb(70, 70, 70), rgb(80, 80, 80));
+    overflow: auto;
+    scrollbar-color: grey rgb(54, 54, 54);
 }
 
 #userCom #userComP{
     color: #ccc;
     font-size: 20px;
+    margin: 7px;
 }
 
 #user a{
@@ -246,4 +250,17 @@ a{
     justify-content: flex-end;
     align-items: center;
     border-top: solid 1px rgb(54, 54, 54);
+}
+
+.deleteReply:hover{
+    cursor: pointer;
+}
+
+#shareMenu{
+    display: none;
+    width: 50%;
+    height: 75px;
+    background-color: #181818;
+    position: relative;
+    z-index: 2;
 }

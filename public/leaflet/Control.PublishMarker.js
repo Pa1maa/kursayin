@@ -52,8 +52,13 @@ L.Control.PublishMarker = class extends L.Control {
                 }
             }
             let comment = null
-            while(!comment){
+            while(comment === null || comment.trim() === ""){
                 comment = prompt("Your comment about this location: ")
+
+                if(comment === null){
+                    alert("Marker will not be saved")
+                    return
+                }
             }
 
             const res = await fetch("/public/marker", {
