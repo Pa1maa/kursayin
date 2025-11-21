@@ -1,58 +1,58 @@
-const commentsUI = document.getElementById("comments")
-const userComP = document.getElementById("userComP")
-const comUsername = document.getElementById("comUsername")
-const comAvatar = document.getElementById("comAvatar")
-const idP = document.getElementById("idP")
-const replyDiv = document.getElementById("replyDiv")
-let user = null
+const searchBut = document.getElementById("searchBut")
+const search = document.getElementById("search")
+const searchDiv = document.getElementById("searchDiv")
+const cancelSearch = document.getElementById("cancelSearch")
 
-L.Control.ShowMyPublicMarkers = class extends L.Control {
+L.Control.Search = class extends L.Control {
     onAdd(map){
         this._map = map
         const container = L.DomUtil.create("div", "leaflet-control leaflet-container")
-        this._mypublished = L.DomUtil.create("a", "control-button", container)
-        this._mypublished.href = "#"
-        this._mypublished.title = "Show my published markers"
-        this._mypublished.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ccc" class="bi bi-person-fill-gear" viewBox="0 0 16 16">
-                                            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4m9.886-3.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
-                                        </svg>`
+        this._search = L.DomUtil.create("a", "control-button", container)
+        this._search.href = "#"
+        this._search.title = "Search for marker"
+        this._search.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ccc" stroke="#ccc" stroke-width="0.3" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                </svg>`
 
-
-        container.style.marginTop = "0px"
-
-        this._markerArr = []
-        this._active = false
-        this._others = []
-
+        container.style.marginTop = "15px"
         this._addDomEvents()
+        this._active = false
+        this._markerArr = []
+        this._others = []
         return container
     }
 
-    async activate(){
+    activate(){
         if(this._active) return
 
         this._deactivateOthers()
-        this._mypublished.classList.add("active")
+        searchDiv.style.display = "block"
+        this._search.classList.add("active")
+        this._searchForMarkers()
         document.getElementById("shareMenu").style.display = "none"
         this._active = true
-        await this._addMarkers()
-        await this._deleteMarkers()
+
+        cancelSearch.addEventListener("click", ()=>{
+            searchDiv.style.display = "none"
+            this.reset()
+        })
     }
 
     deactivate(){
         if(!this._active) return
 
-        this._mypublished.classList.remove("active")
-        this._active = false
+        searchDiv.style.display = "none"
+        this._search.classList.remove("active")
         this._removeMarkers()
+        this._active = false
+    }
+
+    toggle(){
+        this._active ? this.deactivate() : this.activate()
     }
 
     reset(){
         this.deactivate()
-    }
-
-    async toggle(){
-        this._active ? this.deactivate() : await this.activate()
     }
 
     _deactivateOthers(){
@@ -64,37 +64,35 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
     }
 
     _addDomEvents(){
-        L.DomEvent.on(this._mypublished, "click", async (e)=>{
-            L.DomEvent.stop(e)
-            await this.toggle()
-        })
+        L.DomEvent
+            .on(this._search, "click", (e)=>{
+                L.DomEvent.stop(e)
+                this.toggle()
+            })
     }
 
-    async _addMarkers(){
-        let markers = []
+    _searchForMarkers(){
+        searchBut.addEventListener("click", async ()=>{
+            this._removeMarkers()
 
-        if(await this._authenticated()){
-            const res = await fetch("/public/mymarker", { credentials: "include" })
+            const res = await fetch(`/public/search?name=${search.value}`)
             const data = await res.json()
-            markers = data.markers || []
+            if(data.success){
+                const markers = data.markers || []
 
-            for(let i = 0; i < markers.length; i++){
-                const marker = L.marker([markers[i].lat, markers[i].lng]).addTo(this._map)
-                marker.bindPopup(markers[i].name, { autoClose: false, closeOnClick: false }).openPopup()
-                marker._id = markers[i]._id
-                this._markerArr.push(marker)
+                for(let i = 0; i < markers.length; i++){
+                    const marker = L.marker([markers[i].lat, markers[i].lng]).addTo(this._map)
+                    marker.bindPopup(markers[i].name, { autoClose: false, closeOnClick: false }).openPopup()
+                    this._markerArr.push(marker)
 
-                marker.off("click")
-                marker.on("click", async ()=>{
-                    marker.openPopup()
-                    await this._addReplies(markers[i])
-                })
+                    marker.off("click")
+                    marker.on("click", async ()=>{
+                        marker.openPopup()
+                        await this._addReplies()
+                    })
+                }
             }
-        }
-        else{
-            alert("Please Login or Signup to continue")
-            this.deactivate()
-        }
+        })
     }
 
     _removeMarkers(){
@@ -102,37 +100,6 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
             this._markerArr[i].remove()
         }
         this._markerArr = []
-
-        if(commentsUI.style.display === "block"){
-            commentsUI.style.display = "none"
-        }
-    }
-
-    async _deleteMarkers(){
-        for(const marker of this._markerArr){
-            marker.on("dblclick", async ()=>{
-                if(!confirm("Are you sure?")) return
-
-                
-                if(await this._authenticated()){
-                    await fetch(`/public/markers/${marker._id}`, {
-                        method: "DELETE",
-                        credentials: "include"
-                    })
-                    this._markerArr = this._markerArr.filter(m => m._id !== marker._id)
-                    commentsUI.style.display = "none"
-                    replyDiv.innerHTML = ""
-                    marker.off("dblclick")
-                    marker.off("click")
-                    marker.remove()
-                    return
-                }
-                else{
-                    alert("Please Login or Signup to continue")
-                    return
-                }
-            })
-        }
     }
 
     async _addReplies(marker){
@@ -146,10 +113,16 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
             console.log(data.message)
         }
 
+        this._map.setView([marker.lat, marker.lng])
         commentsUI.style.display = "block"
         userComP.innerText = marker.comment
-        comAvatar.src = user.avatarPath
         comUsername.innerHTML = user.username
+        if(user.avatarPath){
+            comAvatar.src = user.avatarPath
+        }
+        else{
+            comAvatar.src = "../assets/sbcf-default-avatar.png"
+        }
 
         const me = await fetch("/auth/me")
         const myData = await me.json()
@@ -219,11 +192,5 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
                 localStorage.setItem("username", usernames[i].innerText)
             })
         }
-    }
-
-    async _authenticated(){
-        const res = await fetch("/auth/me")
-        const data = await res.json()
-        return data.success
     }
 }

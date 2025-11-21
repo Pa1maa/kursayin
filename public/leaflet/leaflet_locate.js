@@ -27,6 +27,7 @@ export function addLocate(map){
 
                 if(!loc.classList.contains("active")){
                     loc.classList.add("active")
+                    document.getElementById("shareMenu").style.display = "none"
                     navigator.geolocation.getCurrentPosition(
                         (pos)=>{
                             const lat = pos.coords.latitude

@@ -13,9 +13,8 @@ L.Control.ShowPublicMarkers = class extends L.Control {
         this._published = L.DomUtil.create("a", "control-button", container)
         this._published.href = "#"
         this._published.title = "Show published markers"
-        this._published.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ccc" class="bi bi-pin-map-fill" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8z"/>
-                                        <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
+        this._published.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ccc" viewBox="0 -960 960 960" style="width: 30px; height: 30px;">
+                                        <path d="M480-360q56 0 101-27.5t71-72.5q-35-29-79-44.5T480-520q-49 0-93 15.5T308-460q26 45 71 72.5T480-360Zm0-200q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0 374q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/>
                                     </svg>`
 
         container.style.marginTop = "0px"
@@ -33,6 +32,7 @@ L.Control.ShowPublicMarkers = class extends L.Control {
 
         this._deactivateOthers()
         this._published.classList.add("active")
+        document.getElementById("shareMenu").style.display = "none"
         this._active = true
         await this._addMarkers()
     }

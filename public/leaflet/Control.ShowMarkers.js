@@ -23,6 +23,7 @@ L.Control.ShowMarkers = class extends L.Control {
 
         this._deactivateOthers()
         this._show.classList.add("active")
+        document.getElementById("shareMenu").style.display = "none"
         this._active = true
         await this._addMarkers()
         await this._deleteMarkers()

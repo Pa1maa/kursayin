@@ -6,6 +6,7 @@ import "../leaflet/Control.PublishMarker.js"
 import "../leaflet/Control.ShowMarkers.js"
 import "../leaflet/Control.ShowPublicMarkers.js"
 import "../leaflet/Control.ShowMyPublicMarkers.js"
+import "../leaflet/Control.Search.js"
 
 document.addEventListener("DOMContentLoaded", async ()=>{
     const navBut = document.getElementById("nav-but")
@@ -48,7 +49,12 @@ document.addEventListener("DOMContentLoaded", async ()=>{
     const replyDiv = document.getElementById("replyDiv")
     const toggleReplies = document.getElementById("toggleReplies")
     const layers = document.getElementById("layers")
+    const shareMenu = document.getElementById("shareMenu")
     const share = document.getElementById("share")
+    const links = document.getElementsByClassName("shareLink")
+    const cancel = document.getElementById("cancelBut")
+    const search = document.getElementById("search")
+    const backspace = document.getElementById("backspace")
 
     toggleReplies.addEventListener("click", ()=>{
         if(replyDiv.style.display !== "none"){
@@ -65,8 +71,26 @@ document.addEventListener("DOMContentLoaded", async ()=>{
         }
     })
 
-    layers.addEventListener("click", (e)=>{
-        e.preventDefault()
+    backspace.addEventListener("click", ()=>{
+        search.value = search.value.slice(0, -1) 
+    })
+
+    share.addEventListener("click", ()=>{
+        shareMenu.style.display = "block"
+        copyShareLink()
+    })
+
+    cancel.addEventListener("click", ()=>{
+        shareMenu.style.display = "none"
+    })
+
+    for(let i = 0; i < links.length; i++){
+        links[i].addEventListener("click", ()=>{
+            shareMenu.style.display = "none"
+        })
+    }
+
+    layers.addEventListener("click", ()=>{
         changeLayer()
     })
 
@@ -212,15 +236,10 @@ function loadMapState(map){
 }
 loadMapState(map)
 
-function copyShareLink(map, curTileInd){
+function copyShareLink(){
     const link = createShareLink(map, curTileInd)
 
     navigator.clipboard.writeText(link)
-}
-
-function openShareMenu(shareDiv){
-    shareDiv.style.display = "block"
-    
 }
 
 const markerControl = new L.Control.Marker()
@@ -229,6 +248,7 @@ const publishMarker = new L.Control.PublishMarker(markerControl)
 const showMarkers = new L.Control.ShowMarkers()
 const showPublicMarker = new L.Control.ShowPublicMarkers()
 const showMyPublicMarkers = new L.Control.ShowMyPublicMarkers()
+const searchMarkers = new L.Control.Search()
 
 addZoom(map)
 addLocate(map)
@@ -238,8 +258,10 @@ publishMarker.addTo(map)
 showMarkers.addTo(map)
 showPublicMarker.addTo(map)
 showMyPublicMarkers.addTo(map)
+searchMarkers.addTo(map)
 
-markerControl._others = [showMarkers, showMyPublicMarkers, showPublicMarker]
-showMarkers._others = [markerControl, showMyPublicMarkers, showPublicMarker]
-showPublicMarker._others = [markerControl, showMarkers, showMyPublicMarkers]
-showMyPublicMarkers._others = [markerControl, showMarkers, showPublicMarker]
+markerControl._others = [showMarkers, showMyPublicMarkers, showPublicMarker, searchMarkers]
+showMarkers._others = [markerControl, showMyPublicMarkers, showPublicMarker, searchMarkers]
+showPublicMarker._others = [markerControl, showMarkers, showMyPublicMarkers, searchMarkers]
+showMyPublicMarkers._others = [markerControl, showMarkers, showPublicMarker, searchMarkers]
+searchMarkers._others = [markerControl, showMarkers, showPublicMarker, showMyPublicMarkers]

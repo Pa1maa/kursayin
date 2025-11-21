@@ -88,4 +88,20 @@ router.get("/mymarker", isAuthenticated, async (req, res)=>{
     }
 })
 
+router.get("/search", async (req, res)=>{
+    try{
+        const search = req.query.name || ""
+        if(!search) return res.status(400).json({ success: false, message: "Missinf required field" })
+
+        const markers = await PublicMarker.find({ name: { $regex: search, $options: "i" } })
+        if(!markers) return res.json({ success: false, message: "No markers found" })
+
+        res.json({ success: true, markers: markers })
+    }
+    catch(err){
+        console.error(err)
+        res.status(500).json({ success: false, message: err.message })
+    }
+})
+
 module.exports = router

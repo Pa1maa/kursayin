@@ -258,9 +258,108 @@ a{
 
 #shareMenu{
     display: none;
-    width: 50%;
-    height: 75px;
-    background-color: #181818;
+    width: 20%;
+    height: 100px;
+    border-radius: 10px 10px 20px 20px;
+    background-color: rgb(54, 54, 54);
     position: relative;
     z-index: 2;
+    margin: 0 auto;
+}
+
+.social{
+    width: 100%;
+    height: 70px;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    scrollbar-color: grey rgb(54, 54, 54);
+}
+
+.social a{
+    height: 75%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
+.social a svg{
+    width: 90%;
+    height: 90%;
+}
+
+.socBut{
+    width: 100%;
+    height: calc(100% - 70px);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.socBut a{
+    font-weight: bold;
+    margin-right: 22px;
+}
+
+#searchDiv{
+    display: none;
+    position: relative;
+    z-index: 3;
+    width: 20%;
+    height: 75px;
+    border-radius: 10px 10px 20px 20px;
+    background-color: rgb(54, 54, 54);
+    margin: 0 auto;
+    padding: 7px;
+}
+
+.searchArea{
+    width: 100%;
+    height: 65%;
+    display: flex;
+    align-items: center;
+    gap: 1%;
+}
+
+.searchArea input{
+    height: 80%;
+    width: 94%;
+    border: none;
+    padding: 5px;
+    border-radius: 7px;
+}
+
+.searchArea input:focus{
+    outline: none;
+    box-shadow: none;
+    border: 2px solid #181818;
+}
+
+.searchArea a{
+    width: 5%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttonArea{
+    height: 35%;
+    width: 95%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    gap: 15px;
+}
+
+.buttonArea a{
+    font-weight: bold;
+}
+
+.buttonArea a:hover{
+    text-decoration: underline;
 }

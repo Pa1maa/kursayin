@@ -24,6 +24,7 @@ L.Control.Marker = class extends L.Control {
         this._deactivateOthers()
         this._link.classList.add("active");
         this._map.on("click", this._onMapClick, this);
+        document.getElementById("shareMenu").style.display = "none"
         this._active = true;
     }
 
