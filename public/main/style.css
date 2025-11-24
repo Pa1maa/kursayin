@@ -363,3 +363,31 @@ a{
 .buttonArea a:hover{
     text-decoration: underline;
 }
+
+#thumbs{
+    width: 100px;
+    height: 100%;
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#thumbs div{
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+#thumbs a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#thumbs p{
+    color: #ccc;
+    font-weight: bold;
+}

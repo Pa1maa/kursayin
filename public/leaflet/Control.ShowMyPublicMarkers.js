@@ -87,6 +87,7 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
                 marker.off("click")
                 marker.on("click", async ()=>{
                     marker.openPopup()
+                    localStorage.setItem("markerId", marker._id)
                     await this._addReplies(markers[i])
                 })
             }
