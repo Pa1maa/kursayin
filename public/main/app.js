@@ -201,7 +201,12 @@ document.addEventListener("DOMContentLoaded", async ()=>{
             div.appendChild(userDetails)
             const userImg = document.createElement("img")
             userImg.alt = "Avatar"
-            userImg.src = userdata.user.avatarPath
+            if(userdata.user.avatarPath){
+                userImg.src = userdata.user.avatarPath
+            }
+            else{
+                userImg.src = "assets/sbcf-default-avatar.png"
+            }
             userDetails.appendChild(userImg)
             const username = document.createElement("a")
             username.href = "/user"

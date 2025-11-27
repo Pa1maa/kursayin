@@ -172,7 +172,12 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
             div.appendChild(userDetails)
             const userImg = document.createElement("img")
             userImg.alt = "Avatar"
-            userImg.src = replys[i].userId.avatarPath
+            if(replys[i].userId.avatarPath){
+                userImg.src = replys[i].userId.avatarPath
+            }
+            else{
+                userImg.src = "assets/sbcf-default-avatar.png"
+            }
             userDetails.appendChild(userImg)
             const username = document.createElement("a")
             username.href = "/user"
