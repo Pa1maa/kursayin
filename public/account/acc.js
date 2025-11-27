@@ -17,6 +17,7 @@ const gender = document.getElementById("gender")
 const saveGender = document.getElementById("saveGender")
 const hiddenDiv = document.getElementById("hiddenPassword")
 const chevronBut = document.getElementById("chevron")
+const deleteAcc = document.getElementById("delacc")
 
 let croppedBlob = null
 let curAvatar
@@ -33,6 +34,31 @@ chevronBut.addEventListener("click", ()=>{
         chevronBut.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" stroke="currentColor" stroke-width="1.5" class="bi bi-chevron-down" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
                                 </svg>`
+    }
+})
+
+deleteAcc.addEventListener("click", async ()=>{
+    if(!confirm("Are you sure?")) return
+
+    const res = await fetch("/api/me")
+    if (!res.ok) return alert("Failed to load user data")
+    const user = await res.json()
+
+    console.log(user.username)
+
+    const delres = await fetch(`/auth/user?username=${user.username}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+    })
+    const data = await delres.json()
+    if(data.success){
+        alert(data.message)
+        const res = await fetch("/auth/logout", { method: "POST", credentials: "include" })
+        const logout = await res.json()
+        
+        if(logout.success){
+            window.location.href = "/"
+        }
     }
 })
 

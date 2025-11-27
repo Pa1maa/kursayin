@@ -50,4 +50,15 @@ router.get("/me", async (req, res)=>{
     res.json({ user, success: true })
 })
 
+router.delete("/user", async (req, res)=>{
+    const username = req.query.username
+    if(!username) return res.status(400).json({ success: false, message: "Id not found" })
+
+    const user = await User.findOne({ username })
+    if(!user) return res.status(404).json({ success: false, message: "User not found" })
+
+    await user.deleteOne()
+    res.json({ success: true, message: "User deleted" })
+})
+
 module.exports = router
