@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", async ()=>{
     const res = await fetch("/auth/me")
     const data = await res.json()
+
     if(data.success){
         window.location.href = "/"
         return
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
             })
 
             const data = await res.json()
+            
             document.getElementById("message").textContent = data.message
             if(data.success){
                 setTimeout(() => {

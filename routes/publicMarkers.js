@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const PublicMarker = require("../models/PublicMarker.js")
 const User = require("../models/User.js")
+const Reply = require("../models/Reply.js")
 
 async function isAuthenticated(req, res, next){
     if(!req.session.userId){
@@ -91,12 +92,42 @@ router.get("/mymarker", isAuthenticated, async (req, res)=>{
 router.get("/search", async (req, res)=>{
     try{
         const search = req.query.name || ""
-        if(!search) return res.status(400).json({ success: false, message: "Missinf required field" })
+        if(!search) return res.status(400).json({ success: false, message: "Missing required field" })
 
         const markers = await PublicMarker.find({ name: { $regex: search, $options: "i" } })
         if(!markers) return res.json({ success: false, message: "No markers found" })
 
         res.json({ success: true, markers: markers })
+    }
+    catch(err){
+        console.error(err)
+        res.status(500).json({ success: false, message: err.message })
+    }
+})
+
+router.delete("/deletemany", isAuthenticated, async (req, res)=>{
+    try{
+        const userId = req.user._id
+        if(!userId) return res.status(400).json({ success: false, message: "User id not provided" })
+
+        const markers = await user.find({ userId: userId })
+        if(!markers) return res.status(404).json({ success: false, message: "Markers not found" })
+
+        for(const marker of markers){
+            const replies = await Reply.find({ markerId: marker._id })
+            if(!replies) return res.status(400).json({ success: false, message: "Replies not found" })
+
+            for(const reply of replies){
+                reply.deleteOne
+            }
+
+            marker.deleteOne()
+        }
+
+        const replies = await Reply.find({ userId: userId })
+        if(!replies) return res.status(400).json({ success: false, message: "Replies not found" })
+
+        res.json({ success: true, message: "Markers deleted" })
     }
     catch(err){
         console.error(err)

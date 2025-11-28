@@ -120,7 +120,7 @@ L.Control.ShowPublicMarkers = class extends L.Control {
             comAvatar.src = user.avatarPath
         }
         else{
-            comAvatar.src = "../assets/sbcf-default-avatar.png"
+            comAvatar.src = "assets/sbcf-default-avatar.png"
         }
 
         const me = await fetch("/auth/me")
@@ -182,7 +182,7 @@ L.Control.ShowPublicMarkers = class extends L.Control {
 
                         await fetch(`/reply/replys/${replys[i]._id}`, {
                             method: "DELETE",
-                            headers: { "Content-Type": "applicaion/json" }
+                            headers: { "Content-Type": "application/json" }
                         })
                         div.style.display = "none"
                     })

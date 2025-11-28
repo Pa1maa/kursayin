@@ -54,6 +54,7 @@ router.delete("/markers/:id", isAuthenticated, async (req, res)=>{
         if(result.deletedCount === 0){
             res.status(404).json({ success: false, message: "Marker not found" })
         }
+        
         res.json({ success: true })
     }
     catch(err){

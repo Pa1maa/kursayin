@@ -112,7 +112,6 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
     async _deleteMarkers(){
         for(const marker of this._markerArr){
             marker.on("dblclick", async ()=>{
-                console.log("handler start")
                 if(!confirm("Are you sure?")) return
 
                 const res = await fetch(`/public/markers?id=${marker._id}`, {
@@ -129,7 +128,6 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
                         headers: { "Content-Type": "application/json" },
                         credentials: "include"
                     })
-                    console.log("handler fetch")
                     
                     this._markerArr = this._markerArr.filter(m => m._id !== marker._id)
                     commentsUI.style.display = "none"
@@ -157,8 +155,13 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
 
         commentsUI.style.display = "block"
         userComP.innerText = marker.comment
-        comAvatar.src = user.avatarPath
         comUsername.innerHTML = user.username
+        if(user.avatarPath){
+            comAvatar.src = user.avatarPath
+        }
+        else{
+            comAvatar.src = "assets/sbcf-default-avatar.png"
+        }
 
         const me = await fetch("/auth/me")
         const myData = await me.json()

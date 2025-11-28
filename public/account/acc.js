@@ -46,11 +46,15 @@ deleteAcc.addEventListener("click", async ()=>{
 
     console.log(user.username)
 
-    const delres = await fetch(`/auth/user?username=${user.username}`, {
+
+    const delres = await fetch(`/public/deleteall`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
+        credentials: "include"
     })
+    
     const data = await delres.json()
+
     if(data.success){
         alert(data.message)
         const res = await fetch("/auth/logout", { method: "POST", credentials: "include" })
@@ -59,6 +63,11 @@ deleteAcc.addEventListener("click", async ()=>{
         if(logout.success){
             window.location.href = "/"
         }
+
+        await fetch(`/auth/user?username=${user.username}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
+        })
     }
 })
 
