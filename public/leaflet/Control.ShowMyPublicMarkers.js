@@ -112,25 +112,33 @@ L.Control.ShowMyPublicMarkers = class extends L.Control {
     async _deleteMarkers(){
         for(const marker of this._markerArr){
             marker.on("dblclick", async ()=>{
+                console.log("handler start")
                 if(!confirm("Are you sure?")) return
 
+                const res = await fetch(`/public/markers?id=${marker._id}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include"
+                })
+                const data = await res.json()
                 
-                if(await this._authenticated()){
-                    await fetch(`/public/markers/${marker._id}`, {
+                if(data.success){
+                    alert(data.message)
+                    await fetch(`/reply/deletemany?id=${marker._id}`, {
                         method: "DELETE",
+                        headers: { "Content-Type": "application/json" },
                         credentials: "include"
                     })
+                    console.log("handler fetch")
+                    
                     this._markerArr = this._markerArr.filter(m => m._id !== marker._id)
                     commentsUI.style.display = "none"
                     replyDiv.innerHTML = ""
-                    marker.off("dblclick")
-                    marker.off("click")
                     marker.remove()
                     return
                 }
                 else{
-                    alert("Please Login or Signup to continue")
-                    return
+                    alert(data.message)
                 }
             })
         }

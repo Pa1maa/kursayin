@@ -51,14 +51,20 @@ router.get("/me", async (req, res)=>{
 })
 
 router.delete("/user", async (req, res)=>{
-    const username = req.query.username
-    if(!username) return res.status(400).json({ success: false, message: "Id not found" })
+    try{
+        const username = req.query.username
+        if(!username) return res.status(400).json({ success: false, message: "Id not found" })
 
-    const user = await User.findOne({ username })
-    if(!user) return res.status(404).json({ success: false, message: "User not found" })
+        const user = await User.findOne({ username })
+        if(!user) return res.status(404).json({ success: false, message: "User not found" })
 
-    await user.deleteOne()
-    res.json({ success: true, message: "User deleted" })
+        await user.deleteOne()
+        res.json({ success: true, message: "User deleted" })
+    }
+    catch(err){
+        console.error(err)
+        res.status(500).json({ success: false, message: err.message })
+    }
 })
 
 module.exports = router

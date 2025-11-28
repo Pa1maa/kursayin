@@ -74,4 +74,24 @@ router.delete("/replys/:id", isAuthenticated, async (req, res)=>{
     }
 })
 
+router.delete("/deletemany", isAuthenticated, async (req, res)=>{
+    try{
+        const markerId = req.query.id
+        if(!markerId) return res.status(400).json({ success: false, message: "Id not found" })
+
+        const replys = await Reply.find({ markerId: markerId })
+        if(!replys) return res.status(404).json({ success: false, message: "Replies not found" })
+
+        for(const reply of replys){
+            reply.deleteOne()
+        }
+
+        res.json({ success: true, message: "Replies deleted" })
+    }
+    catch(err){
+        console.error(err)
+        res.status(500).json({ success: false, message: err.message })
+    }
+})
+
 module.exports = router

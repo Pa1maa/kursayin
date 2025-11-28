@@ -54,9 +54,9 @@ router.post("/marker", isAuthenticated, async (req, res)=>{
     }
 })
 
-router.delete("/markers/:id", isAuthenticated, async (req, res)=>{
+router.delete("/markers", isAuthenticated, async (req, res)=>{
     try{
-        const marker = await PublicMarker.findOne({ _id: req.params.id, userId: req.user._id })
+        const marker = await PublicMarker.findById(req.query.id)
 
         if(!marker){
             return res.status(404).json({ success: false, message: "Marker not found or not owned by user" })
