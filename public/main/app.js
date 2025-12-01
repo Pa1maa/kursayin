@@ -240,7 +240,20 @@ function storeVar(element){
     localStorage.setItem("username", element.innerText)
 }
 
-const map = L.map("map", { zoomControl: false }).setView([40.1792, 44.4991], 14)
+const map = L.map("map", { zoomControl: false })
+
+navigator.geolocation.getCurrentPosition(
+    (pos)=>{
+        const lat = pos.coords.latitude
+        const lng = pos.coords.longitude
+        map.setView([lat, lng], 15)
+    },
+    ()=>{
+        map.setView([51.5007, 0.1245])
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+)
+
 const tilesArr = [
     "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",

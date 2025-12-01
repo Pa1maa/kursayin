@@ -47,7 +47,7 @@ deleteAcc.addEventListener("click", async ()=>{
     console.log(user.username)
 
 
-    const delres = await fetch(`/public/deleteall`, {
+    const delres = await fetch(`/public/deletemany`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         credentials: "include"
@@ -56,10 +56,9 @@ deleteAcc.addEventListener("click", async ()=>{
     const data = await delres.json()
 
     if(data.success){
-        alert(data.message)
         const res = await fetch("/auth/logout", { method: "POST", credentials: "include" })
         const logout = await res.json()
-        
+
         if(logout.success){
             window.location.href = "/"
         }
@@ -264,7 +263,7 @@ saveAvatar.addEventListener("click", async ()=>{
 })
 
 cancelAvatar.addEventListener("click", ()=>{
-    avatar.src = curAvatar
+    avatar.src = curAvatar ? curAvatar : "assets/sbcf-default-avatar.png"
     cancelAvatar.disabled = true
     croppedBlob = null
     avatarFile.value = ""

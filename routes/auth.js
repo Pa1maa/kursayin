@@ -2,6 +2,8 @@ const express = require("express")
 const router = express.Router()
 const User = require("../models/User")
 const bcrypt = require("bcrypt")
+const fs = require("fs").promises
+const path = require("path")
 
 router.post("/signup", async (req, res)=>{
     const { username, email, password } = req.body
@@ -57,6 +59,20 @@ router.delete("/user", async (req, res)=>{
 
         const user = await User.findOne({ username })
         if(!user) return res.status(404).json({ success: false, message: "User not found" })
+
+        const avatarFile = user.avatarPath.replace(/^[/\\]+/, "")
+        const filePath = path.join(__dirname, "..", avatarFile)
+
+        try {
+            await fs.unlink(filePath)
+        } catch (err) {
+            if (err.code === "ENOENT") {
+                console.warn("Avatar file does not exist:", filePath)
+            } else {
+                console.error(err)
+                return res.status(500).json({ success: false, message: "Could not delete file" })
+            }
+        }
 
         await user.deleteOne()
         res.json({ success: true, message: "User deleted" })

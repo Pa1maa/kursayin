@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const PublicMarker = require("../models/PublicMarker.js")
+const UserMarker = require("../models/UserMarker.js")
 const User = require("../models/User.js")
 const Reply = require("../models/Reply.js")
 
@@ -110,7 +111,7 @@ router.delete("/deletemany", isAuthenticated, async (req, res)=>{
         const userId = req.user._id
         if(!userId) return res.status(400).json({ success: false, message: "User id not provided" })
 
-        const markers = await user.find({ userId: userId })
+        const markers = await PublicMarker.find({ userId: userId })
         if(!markers) return res.status(404).json({ success: false, message: "Markers not found" })
 
         for(const marker of markers){
@@ -118,14 +119,25 @@ router.delete("/deletemany", isAuthenticated, async (req, res)=>{
             if(!replies) return res.status(400).json({ success: false, message: "Replies not found" })
 
             for(const reply of replies){
-                reply.deleteOne
+                await reply.deleteOne()
             }
 
-            marker.deleteOne()
+            await marker.deleteOne()
         }
 
         const replies = await Reply.find({ userId: userId })
         if(!replies) return res.status(400).json({ success: false, message: "Replies not found" })
+
+        for(const reply of replies){
+            await reply.deleteOne()
+        }
+
+        const userMarkers = await UserMarker.find({ userId: userId })
+        if(!userMarkers) return res.status(400).json({ success: false, message: "Markers not found" })
+
+        for(const mar of userMarkers){
+            await mar.deleteOne()
+        }
 
         res.json({ success: true, message: "Markers deleted" })
     }
