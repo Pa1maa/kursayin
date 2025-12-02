@@ -60,18 +60,20 @@ router.delete("/user", async (req, res)=>{
         const user = await User.findOne({ username })
         if(!user) return res.status(404).json({ success: false, message: "User not found" })
 
-        const avatarFile = user.avatarPath.replace(/^[/\\]+/, "")
-        const filePath = path.join(__dirname, "..", avatarFile)
+        if (user.avatarPath && user.avatarPath.startsWith("/uploads/")) {
+            const avatarFile = user.avatarPath.replace(/^[/\\]+/, "");
+            const filePath = path.join(__dirname, "..", avatarFile)
 
-        try {
-            await fs.unlink(filePath)
-        } catch (err) {
-            if (err.code === "ENOENT") {
-                console.warn("Avatar file does not exist:", filePath)
-            } else {
-                console.error(err)
-                return res.status(500).json({ success: false, message: "Could not delete file" })
+            try {
+                await fs.unlink(filePath)
+            } catch (err) {
+                if (err.code !== "ENOENT") {
+                    console.error("Failed to delete avatar:", err)
+                    return res.status(500).json({ success: false, message: "Could not delete file" })
+                }
             }
+        } else {
+            console.warn("No valid avatar path to delete:", user.avatarPath)
         }
 
         await user.deleteOne()

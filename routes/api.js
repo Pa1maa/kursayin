@@ -32,7 +32,7 @@ router.get("/me", authRequired, (req, res)=>{
     res.json({ username, email, age, gender, avatarPath })
 })
 
-router.get("/update-username", authRequired, async (req, res)=>{
+router.post("/update-username", authRequired, async (req, res)=>{
     const { username } = req.body
     if(!username) return res.status(400).json({ error: "Username required" })
     
@@ -41,7 +41,7 @@ router.get("/update-username", authRequired, async (req, res)=>{
     res.json({ ok: true, username })
 })
 
-router.get("/update-email", authRequired, async (req, res)=>{
+router.post("/update-email", authRequired, async (req, res)=>{
     const { email } = req.body
     if(!email) return res.status(400).json({ error: "Email required" })
 
@@ -50,7 +50,7 @@ router.get("/update-email", authRequired, async (req, res)=>{
     res.json({ ok: true, email })
 })
 
-router.get("/update-age", authRequired, async (req, res)=>{
+router.post("/update-age", authRequired, async (req, res)=>{
     const { age } = req.body
     if(!age) return res.status(400).json({ error: "Age required" })
 
@@ -59,7 +59,7 @@ router.get("/update-age", authRequired, async (req, res)=>{
     res.json({ ok: true, age })
 })
 
-router.get("/update-gender", authRequired, async (req, res)=>{
+router.post("/update-gender", authRequired, async (req, res)=>{
     const { gender } = req.body
     if(!gender) return res.status(400).json({ error: "Gender required" })
 
@@ -68,7 +68,7 @@ router.get("/update-gender", authRequired, async (req, res)=>{
     res.json({ ok: true, gender })
 })
 
-router.get("/update-password", authRequired, async (req, res)=>{
+router.post("/update-password", authRequired, async (req, res)=>{
     const { currentPassword, newPassword } = req.body
     if(!newPassword) return res.status(400).json({ error: "New pasword required" })
     
@@ -80,16 +80,17 @@ router.get("/update-password", authRequired, async (req, res)=>{
     res.json({ ok: true })
 })
 
-router.get("/update-avatar", authRequired, upload.single("avatar"), async (req, res)=>{
+router.post("/update-avatar", authRequired, upload.single("avatar"), async (req, res)=>{
     if(!req.file) return res.status(400).json({ error: "File required" })
 
     if(req.user.avatarPath){
         const oldAvatarPath = path.join(__dirname, "..", req.user.avatarPath.replace(/^[/\\]+/, ""))
         
-        if(fs.existsSync(oldAvatarPath)){
-            fs.unlink(oldAvatarPath, err=>{
-                if(err) console.error("Faled to mdelete old avatar: ", err)
-            })
+        try{
+            await fs.unlink(oldAvatarPath)
+        }
+        catch(err){
+            if(err.code !== "ENOENT") console.error("Failed to delete avatar: ", err)
         }
     }
 

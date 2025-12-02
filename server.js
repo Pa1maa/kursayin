@@ -6,9 +6,7 @@ const session = require("express-session")
 const MongoStore = require("connect-mongo")
 const fs = require("fs")
 const multer = require("multer")
-const bcrypt = require("bcrypt")
 const cors = require("cors")
-const User = require("./models/User.js")
 const passport = require("passport")
 const authRoutes = require("./routes/auth.js")
 const markerRoutes = require("./routes/markers.js")
@@ -39,6 +37,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, "public")))
+app.use("/uploads", express.static(path.join(__dirname, UPLOAD_DIR)));
 
 app.use(session({
     secret: process.env.SESSION_SECRET || "supersecret",

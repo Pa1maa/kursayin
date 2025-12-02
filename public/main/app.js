@@ -261,6 +261,7 @@ const tilesArr = [
     "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png",
     "https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}.png",
     "https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=ssJc9GV2uuuoBuiMJ6Fo",
+    'https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png',
 ]
 
 const getInd = parseInt(localStorage.getItem("curTileInd"), 10)
