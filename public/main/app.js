@@ -1,5 +1,4 @@
-import { addZoom } from "../leaflet/leaflet_zoom.js"
-import { addLocate } from "../leaflet/leaflet_locate.js"
+import "../leaflet/Control.Zoom.js"
 import "../leaflet/Control.Marker.js"
 import "../leaflet/Control.SaveMarker.js"
 import "../leaflet/Control.PublishMarker.js"
@@ -7,6 +6,7 @@ import "../leaflet/Control.ShowMarkers.js"
 import "../leaflet/Control.ShowPublicMarkers.js"
 import "../leaflet/Control.ShowMyPublicMarkers.js"
 import "../leaflet/Control.Search.js"
+import "../leaflet/Control.Locate.js"
 
 document.addEventListener("DOMContentLoaded", async ()=>{
     const navBut = document.getElementById("nav-but")
@@ -412,9 +412,11 @@ const showMarkers = new L.Control.ShowMarkers()
 const showPublicMarker = new L.Control.ShowPublicMarkers()
 const showMyPublicMarkers = new L.Control.ShowMyPublicMarkers()
 const searchMarkers = new L.Control.Search()
+const locate = new L.Control.Locate()
+const zoom = new L.Control.Zoom()
 
-addZoom(map)
-addLocate(map)
+zoom.addTo(map)
+locate.addTo(map)
 markerControl.addTo(map)
 saveMarker.addTo(map)
 publishMarker.addTo(map)

@@ -5,9 +5,7 @@ L.Control.Marker = class extends L.Control {
         this._link = L.DomUtil.create("a", "control-button", container);
         this._link.href = "#"
         this._link.title = "Add a marker"
-        this._link.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ccc" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
-                                </svg>`
+        this._link.innerHTML = `<img src="/assets/default-icons/marker.svg">`
 
         container.style.marginTop = "15px"
         this._active = false;
@@ -26,6 +24,7 @@ L.Control.Marker = class extends L.Control {
         this._map.on("click", this._onMapClick, this);
         document.getElementById("shareMenu").style.display = "none"
         this._active = true;
+        this._link.innerHTML = `<img src="/assets/active-icons/marker.svg">`
     }
 
     deactivate() {
@@ -34,6 +33,7 @@ L.Control.Marker = class extends L.Control {
         this._link.classList.remove("active");
         this._map.off("click", this._onMapClick, this);
         this._active = false;
+        this._link.innerHTML = `<img src="/assets/default-icons/marker.svg">`
         this._marker?.remove();
     }
 
