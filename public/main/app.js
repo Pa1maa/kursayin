@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
             <a href="/signup" class="links">Sign up</a>
         `
     }
-    
+
     const image = document.getElementById("comAvatar")
     const a = document.getElementById("comUsername")
     const closeUI = document.getElementById("closeUI")
