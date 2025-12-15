@@ -231,7 +231,7 @@ navigator.geolocation.getCurrentPosition(
         map.setView([lat, lng], 15)
     },
     ()=>{
-        map.setView([51.5007, 0.1245])
+        map.setView([51.5007, 0.1245], 15)
     },
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
 )
